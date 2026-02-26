@@ -37,11 +37,13 @@ jobs:
         node: [18, 20]
 
     steps:
+      # ============= InvisiRisk Setup =============
       - name: Setup PSE
         uses: invisirisk/pse-action@latest
         with:
           api_url: "https://app.invisirisk.com"
-          app_token: ${{secrets.IR_API_KEY_TEST}}
+          app_token: ${{secrets.IR_API_KEY}}
+      # ============= InvisiRisk Setup End =============
       - name: Checkout repo
         uses: actions/checkout@v4
 
@@ -66,11 +68,13 @@ jobs:
         with:
           name: coverage
           path: coverage/
+      # ============= InvisiRisk Cleanup =============
       - name: Cleanup PSE
         if: always()
         uses: invisirisk/pse-action@latest
         with:
           cleanup: "true"
+      # ============= InvisiRisk Cleanup End =============
 
   gather_status_test:
     runs-on: ubuntu-latest
@@ -95,11 +99,13 @@ jobs:
     needs: test
 
     steps:
+      # ============= InvisiRisk Setup =============
       - name: Setup PSE
         uses: invisirisk/pse-action@latest
         with:
           api_url: "https://app.invisirisk.com"
-          app_token: ${{secrets.IR_API_KEY_SECURITY}}
+          app_token: ${{secrets.IR_API_KEY}}
+      # ============= InvisiRisk Setup End =============
       - uses: actions/checkout@v4
 
       - name: Dependency audit
@@ -111,11 +117,13 @@ jobs:
           languages: javascript
 
       - uses: github/codeql-action/analyze@v3
+      # ============= InvisiRisk Cleanup =============
       - name: Cleanup PSE
         if: always()
         uses: invisirisk/pse-action@latest
         with:
           cleanup: "true"
+      # ============= InvisiRisk Cleanup End =============
 
   gather_status_security:
     runs-on: ubuntu-latest
@@ -143,11 +151,13 @@ jobs:
       image_tag: ${{ steps.meta.outputs.tag }}
 
     steps:
+      # ============= InvisiRisk Setup =============
       - name: Setup PSE
         uses: invisirisk/pse-action@latest
         with:
           api_url: "https://app.invisirisk.com"
-          app_token: ${{secrets.IR_API_KEY_BUILD}}
+          app_token: ${{secrets.IR_API_KEY}}
+      # ============= InvisiRisk Setup End =============
       - uses: actions/checkout@v4
 
       - name: Setup Node
@@ -172,11 +182,13 @@ jobs:
         with:
           name: build
           path: dist/
+      # ============= InvisiRisk Cleanup =============
       - name: Cleanup PSE
         if: always()
         uses: invisirisk/pse-action@latest
         with:
           cleanup: "true"
+      # ============= InvisiRisk Cleanup End =============
 
   gather_status_build:
     runs-on: ubuntu-latest
@@ -206,11 +218,13 @@ jobs:
       packages: write
 
     steps:
+      # ============= InvisiRisk Setup =============
       - name: Setup PSE
         uses: invisirisk/pse-action@latest
         with:
           api_url: "https://app.invisirisk.com"
-          app_token: ${{secrets.IR_API_KEY_DOCKER}}
+          app_token: ${{secrets.IR_API_KEY}}
+      # ============= InvisiRisk Setup End =============
       - uses: actions/checkout@v4
 
       - name: Log in to GHCR
@@ -227,11 +241,13 @@ jobs:
           tags: |
             ghcr.io/${{ env.IMAGE_NAME }}:latest
             ghcr.io/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.image_tag }}
+      # ============= InvisiRisk Cleanup =============
       - name: Cleanup PSE
         if: always()
         uses: invisirisk/pse-action@latest
         with:
           cleanup: "true"
+      # ============= InvisiRisk Cleanup End =============
 
   gather_status_docker:
     runs-on: ubuntu-latest
@@ -261,11 +277,13 @@ jobs:
       url: https://myapp.example.com
 
     steps:
+      # ============= InvisiRisk Setup =============
       - name: Setup PSE
         uses: invisirisk/pse-action@latest
         with:
           api_url: "https://app.invisirisk.com"
-          app_token: ${{secrets.IR_API_KEY_DEPLOY}}
+          app_token: ${{secrets.IR_API_KEY}}
+      # ============= InvisiRisk Setup End =============
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -280,11 +298,13 @@ jobs:
               --name my-app \
               -p 80:3000 \
               ghcr.io/${{ env.IMAGE_NAME }}:latest
+      # ============= InvisiRisk Cleanup =============
       - name: Cleanup PSE
         if: always()
         uses: invisirisk/pse-action@latest
         with:
           cleanup: "true"
+      # ============= InvisiRisk Cleanup End =============
 
   gather_status_deploy:
     runs-on: ubuntu-latest
