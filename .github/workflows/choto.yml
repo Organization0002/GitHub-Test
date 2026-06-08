@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,6 +20,12 @@ jobs:
         node-version: [18.x]
 
     steps:
+      # ============= InvisiRisk Setup =============
+      - name: Setup PSE
+        uses: invisirisk/pse-action@latest
+        with:
+          app_token: ${{secrets.IR_TOKEN}}
+      # ============= InvisiRisk Setup End =============
       - name: Checkout repository
         uses: actions/checkout@v4
 
