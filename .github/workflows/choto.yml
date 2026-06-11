@@ -1,15 +1,12 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
+  workflow_dispatch: 
 permissions:
   checks: write
   actions: read
   contents: read
+  id-token: write
 
 jobs:
   build:
@@ -22,9 +19,9 @@ jobs:
     steps:
       # ============= InvisiRisk Setup =============
       - name: Setup PSE
-        uses: invisirisk/pse-action@latest
+        uses: invisirisk/pse-action@develop
         with:
-          app_token: ${{secrets.IR_TOKEN}}
+          api_url: "https://app.dev.invisirisk.com"
       # ============= InvisiRisk Setup End =============
 
       - name: Checkout repository
