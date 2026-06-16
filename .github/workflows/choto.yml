@@ -1,41 +1,37 @@
-name: Node.js CI
+name: NPM PROJECT
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 permissions:
-  checks: write
-  actions: read
   contents: read
-  id-token: write
+  checks: write
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x]
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # ============= InvisiRisk Setup =============
-      - name: Setup PSE
-        uses: invisirisk/pse-action@develop
-        with:
-          api_url: https://app.dev.invisirisk.com
-      # ============= InvisiRisk Setup End =============
-
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install --prefer-offline --no-audit
 
-      - name: Run tests
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
         run: npm test
+
+      - name: Build
+        run: npm run build
