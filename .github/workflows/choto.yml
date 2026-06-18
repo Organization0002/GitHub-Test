@@ -9,12 +9,19 @@ on:
 permissions:
   contents: read
   checks: write
+  actions: read
+  id-token: write
 
 jobs:
   ci:
     runs-on: ubuntu-latest
 
     steps:
+      # ============= InvisiRisk Setup =============
+      - name: Setup PSE
+        uses: invisirisk/pse-action@latest
+      # ============= InvisiRisk Setup End =============
+
       - name: Checkout
         uses: actions/checkout@v4
 
