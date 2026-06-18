@@ -9,12 +9,20 @@ on:
 permissions:
   contents: read
   checks: write
+  actions: read
 
 jobs:
   ci:
     runs-on: ubuntu-latest
 
     steps:
+      # ============= InvisiRisk Setup =============
+      - name: Setup PSE
+        uses: invisirisk/pse-action@latest
+        with:
+          app_token: ${{secrets.IR_TOKEN}}
+      # ============= InvisiRisk Setup End =============
+
       - name: Checkout
         uses: actions/checkout@v4
 
