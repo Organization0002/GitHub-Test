@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ "main" ]
  
+permissions:
+  checks: write
+  actions: read
+  contents: read
+  id-token: write
+ 
 env:
   CARGO_TERM_COLOR: always
  
@@ -15,6 +21,11 @@ jobs:
     runs-on: ubuntu-latest
  
     steps:
+      # ============= InvisiRisk Setup =============
+      - name: Setup PSE
+        uses: invisirisk/pse-action@latest
+      # ============= InvisiRisk Setup End =============
+      
       - name: Checkout code
         uses: actions/checkout@v4
  
